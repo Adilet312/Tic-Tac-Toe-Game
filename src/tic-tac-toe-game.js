@@ -1,7 +1,9 @@
 import "./css/styles.css";
 /*Players*/
-const playerX = 'X';
-const playerO = 'O';
+let playerX = {player:"X",switchOn:true}
+let playerO = {player:"O",switchOn:false}
+// const playerX = 'X';
+// const playerO = 'O';
 /*Original board*/
 let origin_board;
 /*Winning scenerio*/
@@ -33,11 +35,19 @@ function startGame(){
     cells[idx].addEventListener('click',onClick, false);//passonClick function when cell clicked
   }
 }
+
 /*
   Get id of each box by event listener.
 */
 function onClick(cellId){//Get event target (cell's id)
-  turn(cellId.target.id,playerX);//Give two argument such as cell's id and player.
+  if(playerX.switchOn){
+    playerX.switchOn = false; playerO.switchOn = true;
+    turn(cellId.target.id,playerX.player);//Give two argument such as cell's id and player.
+  }
+  else if(playerO.switchOn){
+    playerX.switchOn = true; playerO.switchOn = false;
+    turn(cellId.target.id,playerO.player);//Give two argument such as cell's id and player.
+  }
 }
 
 /*
