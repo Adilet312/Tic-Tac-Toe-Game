@@ -74,19 +74,66 @@ function checkWin(board,player){
   }
   return gameWinner;
 }
-/*Game over */
+/*Marked wining rows and disable all cells that will not be  clickable*/
 function gameOver(gameWon){
   for(let idx of win_scenerios[gameWon.index]){
     document.getElementById(idx).style.background = "red";
   }
   for(let idx = 0; idx < cells.length; idx++){
-    cells[idx].removeEventListener('click',turn,false);
+    cells[idx].removeEventListener('click',onClick, false);
   }
+  displayWinner(gameWon.player);
+
+
+}
+/*Display winner */
+function displayWinner(player){
+  /*Div element*/
+  let overlay = document.createElement('div');
+  overlay.style.position = "absolute";
+  overlay.style.top = window.pageYOffset + "px";
+  overlay.style.left =  window.pageXOffset + "px";
+  overlay.style.background = 'rgba(0,0,0,0.7)';
+  overlay.style.cursor = "pointer";
+  overlay.style.width = window.innerWidth + "px";
+  overlay.style.height = window.innerHeight + "px";
+  /*Show winner*/
+  let winner = document.createElement('span');
+  winner.innerHTML ="Congratulations! Winner is "+player;
+  winner.style.color = "white";
+  winner.style.fontSize = "100px";
+  winner.style.position = "absolute";
+  winner.style.top = "30%";
+  winner.style.left = "10%";
+  winner.style.display = "flex";
+  winner.style.flexWrap = "wrap";
+  overlay.appendChild(winner);
+  /*close icon*/
+  let close = document.createElement('span');
+  close.innerHTML ="X";
+  close.style.color = "white";
+  close.style.fontSize = "20px";
+  close.style.position = "absolute";
+  close.style.top = "10px";
+  close.style.right = "10px";
+  overlay.appendChild(close);
+  document.body.appendChild(overlay);
+  /*Close overlay when it is clicked*/
+  close.addEventListener('click',function(){
+    if(overlay){
+      overlay.parentNode.removeChild(overlay);
+      for(let idx = 0; idx < cells.length; idx++){
+        cells[idx].style.background = "black";
+      }
+      startGame();
+    }
+  },false);
+
 }
 /*Clean board*/
 document.querySelector('button').addEventListener('click',function(){
   for(let idx = 0; idx < cells.length; idx++){
-    cells[idx].innerHTML = '';//Empty each cell's value
-    cells[idx].style.background = "black"
+    cells[idx].style.background = "black";
   }
+  startGame();
 },false)
